@@ -9,11 +9,7 @@ const server = new McpServer({
     version: "1.0.0"
 });
 
-// ... set up server resources, tools, and prompts ...
-
-const app = express();
-
-
+// Example tool for demonstration purposes
 server.tool(
     "addTwoNumbers",
     "Add two numbers",
@@ -34,32 +30,37 @@ server.tool(
     }
 )
 
+// Twitter posting tool
 server.tool(
     "createPost",
-    "Create a post on X formally known as Twitter ", {
-    status: z.string()
-}, async (arg) => {
-    const { status } = arg;
-    return createPost(status);
-})
-
+    "Create a post on X formally known as Twitter ",
+    {
+        status: z.string()
+    },
+    async (arg) => {
+        const { status } = arg;
+        return createPost(status);
+    }
+)
 
 // to support multiple simultaneous connections we have a lookup object from
 // sessionId to transport
 const transports = {};
 
+const app = express();
+
 app.get("/sse", async (req, res) => {
     const transport = new SSEServerTransport('/messages', res);
-    transports[ transport.sessionId ] = transport;
+    transports[transport.sessionId] = transport;
     res.on("close", () => {
-        delete transports[ transport.sessionId ];
+        delete transports[transport.sessionId];
     });
     await server.connect(transport);
 });
 
 app.post("/messages", async (req, res) => {
     const sessionId = req.query.sessionId;
-    const transport = transports[ sessionId ];
+    const transport = transports[sessionId];
     if (transport) {
         await transport.handlePostMessage(req, res);
     } else {
