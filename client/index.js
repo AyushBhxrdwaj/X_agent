@@ -52,7 +52,7 @@ async function handleToolCall(toolCall) {
         arguments: toolCall.args
     });
     
-    console.log("Tool result:", toolResult.content[0].text);
+
     
     
     chatHistory.push({
@@ -168,8 +168,6 @@ async function chatLoop() {
                 
                 // If this was a tweet request and no tool was called, post the tweet automatically
                 if (isTweetRequest) {
-                    console.log("\nDetected tweet request. Auto-posting...");
-                    // Extract the tweet content - look for content between quotes or the first line
                     let tweetContent = '';
                     
                     // Try to extract content between quotes first
@@ -195,7 +193,7 @@ async function chatLoop() {
                                     status: tweetContent
                                 }
                             });
-                            console.log("Posted tweet. Result:", toolResult.content[0].text);
+                            
                             
                           
                             chatHistory.push({
