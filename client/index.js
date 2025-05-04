@@ -42,7 +42,7 @@ const systemPrompt = {
     ]
 };
 
-\
+
 chatHistory.push(systemPrompt);
 
 async function handleToolCall(toolCall) {
